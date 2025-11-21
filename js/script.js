@@ -17,7 +17,8 @@ if (signupForm) {
         const nickname = document.getElementById('signup-nickname').value;
 
         try {
-            const response = await fetch('http://localhost:3000/signup', {
+            // ★ Cloudflare Workers용 경로로 변경: /api/signup
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password, nickname }),
@@ -56,7 +57,8 @@ if (loginForm) {
         const password = document.getElementById('login-password').value;
 
         try {
-            const response = await fetch('http://localhost:3000/login', {
+            // ★ Cloudflare Workers용 경로로 변경: /api/login
+            const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
@@ -104,8 +106,8 @@ async function loadRanking() {
     leaderboardList.innerHTML = '<div class="loading">랭킹을 불러오는 중...</div>';
 
     try {
-        // 백엔드 서버에 랭킹 데이터 요청 (db.json이 아닌 서버 API)
-        const response = await fetch('http://localhost:3000/ranking');
+        // ★ Cloudflare Workers용 경로로 변경: /api/ranking
+        const response = await fetch('/api/ranking');
         const data = await response.json();
 
         if (!data.success) {
@@ -170,10 +172,16 @@ async function loadRanking() {
 window.submitGameResult = async function submitGameResult(userId, score, wrongItems) {
     try {
         const mistakes = Array.isArray(wrongItems) ? wrongItems.length : 0;
-        const res = await fetch('http://localhost:3000/submit-score', {
+        // ★ Cloudflare Workers용 경로로 변경: /api/submit-score
+        const res = await fetch('/api/submit-score', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: Number(userId), score: Number(score), mistakes, wrongItems: Array.isArray(wrongItems) ? wrongItems : [] })
+            body: JSON.stringify({
+                userId: Number(userId),
+                score: Number(score),
+                mistakes,
+                wrongItems: Array.isArray(wrongItems) ? wrongItems : []
+            })
         });
         const data = await res.json();
         if (!data.success) throw new Error(data.message || '제출 실패');
