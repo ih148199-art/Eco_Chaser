@@ -1826,6 +1826,16 @@ function endGame() {
     // 티어 및 종료 메시지 반영
     updateEndingTierAndMessage();
 
+    // 🔽 여기서 서버에 점수 전송 (localStorage의 userId 사용)
+    if (window.submitGameResultFromLocal) {
+        try {
+            const wrongItems = state.incorrectAnswers || [];
+            window.submitGameResultFromLocal(state.score, wrongItems);
+        } catch (e) {
+            console.error('점수 전송 실패:', e);
+        }
+    }
+
     document.getElementById('ending').style.display = 'flex';
 }
 
