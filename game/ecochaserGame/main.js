@@ -1826,14 +1826,32 @@ function endGame() {
     // 티어 및 종료 메시지 반영
     updateEndingTierAndMessage();
 
-    // 🔽 여기서 서버에 점수 전송 (localStorage의 userId 사용)
-    if (window.submitGameResultFromLocal) {
-        try {
+    // 🔽 여기서 서버에 점수 전송 (localStorage의 userId 사용, 직접 fetch)
+    try {
+        const userIdStr = localStorage.getItem('userId');
+        if (userIdStr) {
+            const userId = Number(userIdStr);
             const wrongItems = state.incorrectAnswers || [];
-            window.submitGameResultFromLocal(state.score, wrongItems);
-        } catch (e) {
-            console.error('점수 전송 실패:', e);
+            const mistakes = Array.isArray(wrongItems) ? wrongItems.length : 0;
+
+            fetch('/api/submit-score', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId,
+                    score: Number(state.score) || 0,
+                    mistakes,
+                    wrongItems,
+                    locate: null, // 필요하면 지역 정보 넣기
+                }),
+            }).catch((e) => {
+                console.error('점수 전송 실패:', e);
+            });
+        } else {
+            console.warn('점수 전송 불가: localStorage에 userId가 없습니다.');
         }
+    } catch (e) {
+        console.error('점수 전송 처리 중 오류:', e);
     }
 
     document.getElementById('ending').style.display = 'flex';
