@@ -17,8 +17,8 @@ if (signupForm) {
         const nickname = document.getElementById('signup-nickname').value;
 
         try {
-            // ★ Cloudflare Workers용 경로로 변경: /api/signup
-            const response = await fetch('/api/signup', {
+            // ★ Cloudflare Workers용 경로로 변경: /api/users
+            const response = await fetch('/api/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password, nickname }),
