@@ -342,10 +342,17 @@ window.submitGameResultFromLocal = async function submitGameResultFromLocal(scor
  * [페이지 모드(해시)가 변경될 때마다 실행되는 함수]
  */
 function applyModeFromHash() {
-    const isIndexPage = document.body.classList.contains('mode-home') || 
-                        document.body.classList.contains('mode-ranking');
+    // hero 섹션이나 지역 통계 섹션이 있으면 index.html 로 간주
+    const isIndexPage = !!document.getElementById('region-stats-section') ||
+                        !!document.querySelector('.hero');
 
     if (!isIndexPage) return; // index.html 아니면 실행 안 함
+
+    // 초기 진입 시 body에 모드 클래스가 없으면 기본을 mode-home으로 설정
+    if (!document.body.classList.contains('mode-home') &&
+        !document.body.classList.contains('mode-ranking')) {
+        document.body.classList.add('mode-home');
+    }
     
     if (location.hash === '#ranking') {
         document.body.classList.remove('mode-home');
@@ -368,9 +375,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- (C) 페이지별 초기화 로직 ---
     
-    // 1. index.html인지 확인
-    const isIndexPage = document.body.classList.contains('mode-home') || 
-                        document.body.classList.contains('mode-ranking');
+    // 1. index.html인지 확인 (지역 통계 섹션이 있으면 index 페이지로 간주)
+    const isIndexPage = !!document.getElementById('region-stats-section');
 
     // 2. 랭킹 리스트(.leaderboard-list)가 페이지에 있는지 확인
     const leaderboardList = document.querySelector('.leaderboard-list');
