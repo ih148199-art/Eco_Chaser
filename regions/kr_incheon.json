@@ -5,7 +5,7 @@
     { "id": "general", "name": "일반쓰레기", "color": "0x4CAF50" },
     { "id": "recycle", "name": "재활용", "color": "0x2196F3" },
     { "id": "food", "name": "음식물", "color": "0xFFC107" }
-  ],
+    ],
   "problems": [
     {
       "question": "인천에서 커피 찌꺼기는 어떻게 버려야 할까요?",

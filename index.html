@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EcoChaser</title>
+  <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="image/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/style.css"/>
   <style>
     /* 필요 시 기존 모드 스타일은 지금은 사용하지 않아도 됨 */
@@ -63,13 +65,14 @@
 
   <main class="main-content">
     <!-- 1. 히어로 / 게임 소개 요약 -->
-    <section class="hero">
+    <section class="hero reveal">
       <div class="hero-grid">
         <div class="hero-left">
           <div class="hero-content">
-            <h1>Eco Chaser</h1>
-            <p>쓰레기를 분리수거하며 환경을 지키는 
-              <br>실시간 참여형 게임</p>
+            <h1 class="hero-title"><img src="image/ecochaser.png" alt="Eco Chaser" class="hero-title-img"></h1>
+            <p>
+              러너 게임을 즐기며 자연스럽게 <br>지역별 분리배출 규칙을 배워보세요!
+            </p>
             <div class="cta-buttons">
               <a href="game/ecochaserGame/index.html" class="btn btn-primary">지금 플레이하기</a>
               <a href="#ranking-section" class="btn btn-secondary">랭킹 보기</a>
@@ -81,9 +84,9 @@
           <div class="carousel">
             <div class="carousel-track">
               <article class="carousel-slide">
-                <span class="carousel-label">미션 하이라이트</span>
-                <h3>주말 해변 대청소</h3>
-                <p>플라스틱과 유리를 분리해서 수거하면 공동 목표 게이지가 채워져요.</p>
+                <span class="carousel-label">실시간 경쟁</span>
+                <h3>친구들과 순위 대결</h3>
+                <p>동네별 포인트를 모아 리더보드 <br>상위권에 도전해 보세요!</p>
                 <div class="carousel-meters">
                   <div class="carousel-meter"><span></span></div>
                   <div class="carousel-meter"><span></span></div>
@@ -91,9 +94,9 @@
                 </div>
               </article>
               <article class="carousel-slide">
-                <span class="carousel-label">실시간 경쟁</span>
-                <h3>친구들과 순위 대결</h3>
-                <p>동네별 포인트를 모아 리더보드 상위권에 도전해 보세요.</p>
+                <span class="carousel-label">지역별 통계</span>
+                <h3>지역별 통계</h3>
+                <p>지역별 통계표를 보며 지역별 분리배출 규칙을 확인해보세요!</p>
                 <div class="carousel-meters">
                   <div class="carousel-meter"><span></span></div>
                   <div class="carousel-meter"><span></span></div>
@@ -103,7 +106,7 @@
               <article class="carousel-slide">
                 <span class="carousel-label">성장 보상</span>
                 <h3>친환경 배지 수집</h3>
-                <p>분리수거 미션을 달성할 때마다 희귀 배지를 잠금 해제하세요.</p>
+                <p>점수를 쌓으면서 다양한 환경 배지를 잠금 해제하세요!</p>
                 <div class="carousel-meters">
                   <div class="carousel-meter"><span></span></div>
                   <div class="carousel-meter"><span></span></div>
@@ -117,51 +120,110 @@
     </section>
 
     <!-- 2. 게임 소개 상세 -->
-    <section class="game-intro" id="game-intro">
+    <section class="game-intro reveal" id="game-intro">
       <div class="intro-header">
         <div class="intro-header-left">
-          <h2>외국인 유학생과 기숙사생을 <br>위한 환경 인식 개선 게임</h2>
+          <h2>"환경을 배우는 새로운 방식"</h2>
         </div>
         <div class="intro-header-right">
           <h3>
-            이 게임은 외국인 유학생과 기숙사생이 다른 지역의 분리수거 기준을 쉽고 재미있게 익힐 수 있도록 설계된 환경 인식 개선 게임입니다.<br>
-            캐릭터가 다양한 지역을 여행하며 쓰레기를 올바른 통에 넣는 미션을 수행하고,
-            지역마다 다른 분리수거 규칙을 자연스럽게 학습합니다.
-            <br>누구나 즐길 수 있는 러너 스타일 게임으로, 실천보다 인식 개선에 <br>중점을 둡니다.
+            <strong>Eco Chaser</strong>는 외국인 유학생과 기숙사생이 지역별 분리수거 기준을 <br>자연스럽게 익힐 수 있도록 설계된 러너 게임입니다.
+            <br>도시를 뛰며 지역별로 환경 인식 개선에 참여하세요!
           </h3>
         </div>
       </div>
       <div class="intro-grid">
-        <article class="intro-card highlight">
-          <h3><strong>다채로운 학습 경험</strong></h3>
-          <p>지역별 분리수거 정보를 게임 스테이지로 재구성하여 복잡한 규칙도 직관적으로 학습합니다.</p>
-          <ul>
-            <li>단순한 이론이 아닌 행동 기반 인식 개선</li>
-            <li>러너형 진행 + 선택형 퀴즈 조합</li>
-            <li>번역 기능으로 외국인도 손쉽게 참여</li>
-          </ul>
+        <!-- 1. 행동 변화를 유도하는 실전 학습 경험 -->
+        <article class="intro-card intro-card--behavior" data-intro-index="0">
+          <h3><span class="intro-card-icon">🌳</span>
+            <strong>행동 변화를 유도하는 <br>실전 학습 경험</strong></h3>
+          <p class="intro-card-kicker">🌱 생활 속에서 행동을 바꾸게 <br>만드는 실전형 러닝!</p>
         </article>
-        <article class="intro-card highlight">
-          <h3><strong>차별화된 시스템</strong></h3>
-          <p>사용자 지역 정보를 JSON 데이터와 연동해 현실적인 미션과 정답을 자동 생성합니다.</p>
-          <ul>
-            <li>지역별 규칙을 반영한 몰입형 콘텐츠</li>
-            <li>게임 종료 후 오답 노트로 약점 보완</li>
-            <li>누구나 접근 가능한 직관적 인터페이스</li>
-          </ul>
+
+        <!-- 2. 차별화된 데이터 기반 교육 시스템 -->
+        <article class="intro-card intro-card--data" data-intro-index="1">
+          <h3><span class="intro-card-icon">🧠</span>
+            <strong>차별화된 데이터 기반 <br>교육 시스템</strong></h3>
+          <p class="intro-card-kicker">📊 학습 데이터를 기반으로 더 <br>똑똑하게 피드백!</p>
         </article>
-        <article class="intro-card highlight">
-          <h3><strong>전략적 게임성</strong></h3>
-          <p>실시간 러너 플레이에 전략 요소를 더해 교육 효과를 극대화하고 학습 지속성을 높입니다.</p>
-          <div class="intro-footnote">
-            지역별 규칙을 반영한 현실적인 콘텐츠와 전략적 게임성을 결합해 사용자에게 몰입감 있는 교육 경험을 제공합니다.
-          </div>
+
+        <!-- 3. 몰입도를 높이는 전략적 게임성 -->
+        <article class="intro-card intro-card--gameplay" data-intro-index="2">
+          <h3><span class="intro-card-icon">🎮</span>
+            <strong>몰입도를 높이는 <br>전략적 게임성</strong></h3>
+          <p class="intro-card-kicker">🕹️ 게임처럼 재밌지만, 끝까지 남는 건 <br>환경 감수성!</p>
         </article>
       </div>
     </section>
 
+    <!-- Intro detail fullscreen slider overlay -->
+    <div id="introDetailOverlay" class="intro-overlay" aria-hidden="true">
+      <div class="intro-overlay-backdrop"></div>
+      <div class="intro-overlay-dialog" role="dialog" aria-modal="true" aria-labelledby="introOverlayTitle">
+        <button type="button" class="intro-overlay-close" aria-label="닫기">✕</button>
+
+        <header class="intro-overlay-header">
+          <p class="intro-overlay-eyebrow">환경을 배우는 새로운 방식</p>
+          <h2 id="introOverlayTitle" class="intro-overlay-title">행동 변화를 유도하는 실전 학습 경험</h2>
+        </header>
+
+        <div class="intro-overlay-slider">
+          <button type="button" class="intro-overlay-arrow intro-overlay-arrow--prev" aria-label="이전">‹</button>
+          <div class="intro-overlay-viewport">
+            <div class="intro-overlay-track">
+              <!-- Slide 1: 행동 변화 -->
+              <article class="intro-overlay-slide" data-intro-slide="0">
+                <h3><span class="intro-card-icon"> 🍃</span><strong>행동 변화를 유도하는 실전 학습 경험</strong></h3>
+                <div class="intro-overlay-body">
+                  <p>실제 환경 적응을 위한 지역 맞춤형 교육 솔루션</p>
+                  <ul>
+                    <li><strong>현실 기반 학습</strong> : 외국인 유학생 및 신입생이 실제로 거주하는 지역별 분리수거 규정을 게임 콘텐츠에 반영</li>
+                    <li><strong>행동 중심 피드백</strong> : 교과서 학습을 넘어, 즉각적인 피드백으로 지속 가능한 행동 변화 유도</li>
+                    <li><strong>글로벌 접근성</strong> : 다국어 번역을 지원하는 직관적인 러너형 게임으로, 누구나 쉽게 환경 규정 익히기</li>
+                  </ul>
+                </div>
+              </article>
+
+              <!-- Slide 2: 데이터 기반 시스템 -->
+              <article class="intro-overlay-slide" data-intro-slide="1">
+                <h3><span class="intro-card-icon">📈</span><strong>차별화된 데이터 기반 교육 시스템</strong></h3>
+                <div class="intro-overlay-body">
+                  <p>학습 성과를 정량화하고 지역 사회에 기여하는 데이터 플렛폼</p>
+                  <ul>
+                    <li><strong>정밀한 성과 분석</strong> : 개인 점수, 랭킹, 오답 데이터를 분석해 취약한 분리수거 항목을 정확히 파악</li>
+                    <li><strong>지역별 통계 제공</strong> : 익명화된 데이터를 활용해 지역·학교 단위의 환경 인식 현황을 한눈에 볼 수 있음</li>
+                    <li><strong>정책 기여 가능성</strong> : 축적된 통계는 지자체의 외국인·신입생 대상 환경 정책 수립에 참고 자료로 활용가능</li>
+                  </ul>
+                </div>
+              </article>
+
+              <!-- Slide 3: 전략적 게임성 -->
+              <article class="intro-overlay-slide" data-intro-slide="2">
+                <h3><span class="intro-card-icon">🚀</span><strong>몰입도를 높이는 전략적 게임성</strong></h3>
+                <div class="intro-overlay-body">
+                  <p>재미와 경쟁을 통해 자발적인 학습 참여를 유도</p>
+                  <ul>
+                    <li><strong>게이미피케이션 전략</strong> : 현실적인 분리수거 콘텐츠와 러닝 게임을 결합해 학습 흥미와 도전 의식을 높임</li>
+                    <li><strong>사회적 동기 부여</strong> : 개인 및 학교 단위 랭킹 시스템으로 경쟁과 성취감을 자극해 자발적인 반복 학습을 유도</li>
+                    <li><strong>단순함 속의 깊이</strong> : 간결한 조작 방식에 전략적 선택의 재미를 더해, 계속 게임에 돌아오게 되는 경험을 제공</li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </div>
+          <button type="button" class="intro-overlay-arrow intro-overlay-arrow--next" aria-label="다음">›</button>
+        </div>
+
+        <div class="intro-overlay-dots" aria-hidden="true">
+          <button type="button" class="intro-overlay-dot" data-intro-dot="0"></button>
+          <button type="button" class="intro-overlay-dot" data-intro-dot="1"></button>
+          <button type="button" class="intro-overlay-dot" data-intro-dot="2"></button>
+        </div>
+      </div>
+    </div>
+
     <!-- 3. 통합 랭킹 섹션 -->
-    <section id="ranking-section" class="leaderboard">
+    <section id="ranking-section" class="leaderboard reveal">
       <h2>통합 랭킹</h2>
       <div class="leaderboard-list">
         <div class="loading">랭킹을 불러오는 중...</div>
@@ -169,7 +231,7 @@
     </section>
 
     <!-- 4. 지역별 통계 섹션 -->
-    <section id="region-stats-section" class="stats-section">
+    <section id="region-stats-section" class="stats-section reveal">
       <h2>지역별 통계</h2>
 
       <div class="stats-controls">
@@ -185,6 +247,50 @@
 
       <div id="regionStatsSummary" class="stats-summary">
         <p>지역을 선택하면 플레이 횟수, 평균 점수, 최고 점수 등의 통계가 여기에 표시됩니다.</p>
+      </div>
+
+      <div class="stats-charts">
+        <section class="stats-chart-card" id="regionComparisonChart" aria-label="지역별 평균 오답률 그래프">
+          <header class="stats-chart-header">
+            <h3>지역별 평균 오답률</h3>
+            <p class="stats-chart-subtitle">최근 기록 기준 상위 지역의 추정 오답률</p>
+          </header>
+          <div class="stats-chart-body">
+            <div class="stats-chart-yaxis">
+              <span>100%</span>
+              <span>80%</span>
+              <span>60%</span>
+              <span>40%</span>
+              <span>20%</span>
+              <span>0%</span>
+            </div>
+            <div class="stats-chart-bars" data-chart="regions">
+              <!-- JS에서 막대가 동적으로 채워집니다. -->
+            </div>
+          </div>
+          <p class="stats-chart-caption">지역별 평균 오답률을 통해 분리배출 안내가 더 필요한 지역을 파악할 수 있습니다.</p>
+        </section>
+
+        <section class="stats-chart-card" id="wasteTypeChart" aria-label="분류별 오답률 그래프">
+          <header class="stats-chart-header">
+            <h3>분리배출 항목별 오답률</h3>
+            <p class="stats-chart-subtitle">선택한 지역에서 어떤 분리수거 항목이 가장 어려운지 보여줍니다.</p>
+          </header>
+          <div class="stats-chart-body">
+            <div class="stats-chart-yaxis">
+              <span>100%</span>
+              <span>80%</span>
+              <span>60%</span>
+              <span>40%</span>
+              <span>20%</span>
+              <span>0%</span>
+            </div>
+            <div class="stats-chart-bars" data-chart="waste-types">
+              <!-- JS에서 막대가 동적으로 채워집니다. -->
+            </div>
+          </div>
+          <p class="stats-chart-caption">일반 쓰레기, 음식물 쓰레기, 재활용 등 어떤 항목의 실천률이 낮은지 한눈에 비교할 수 있습니다.</p>
+        </section>
       </div>
 
       <table class="stats-table">

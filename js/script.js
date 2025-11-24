@@ -104,6 +104,138 @@ window.submitGameResult = async function submitGameResult(userId, score, wrongIt
     }
 };
 
+// Scroll reveal & hero load-in animations
+document.addEventListener('DOMContentLoaded', () => {
+    const revealEls = document.querySelectorAll('.reveal');
+    const hero = document.querySelector('.hero');
+
+    if (hero) {
+        requestAnimationFrame(() => {
+            hero.classList.add('hero-loaded');
+        });
+    }
+
+    if (!('IntersectionObserver' in window)) {
+        revealEls.forEach(el => el.classList.add('reveal-active'));
+    } else {
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-active');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2
+        });
+
+        revealEls.forEach(el => observer.observe(el));
+    }
+
+    // Intro cards → fullscreen detail slider overlay
+    const introCards = document.querySelectorAll('.intro-card[data-intro-index]');
+    const introOverlay = document.getElementById('introDetailOverlay');
+    const introOverlayTrack = introOverlay?.querySelector('.intro-overlay-track');
+    const introOverlaySlides = introOverlay ? introOverlay.querySelectorAll('.intro-overlay-slide') : [];
+    const introOverlayTitleEl = introOverlay?.querySelector('#introOverlayTitle');
+    const introPrevBtn = introOverlay?.querySelector('.intro-overlay-arrow--prev');
+    const introNextBtn = introOverlay?.querySelector('.intro-overlay-arrow--next');
+    const introDots = introOverlay ? introOverlay.querySelectorAll('.intro-overlay-dot') : [];
+    const introCloseBtn = introOverlay?.querySelector('.intro-overlay-close');
+
+    let introCurrentIndex = 0;
+
+    const syncIntroOverlay = () => {
+        if (!introOverlayTrack) return;
+        introOverlayTrack.style.transform = `translateX(-${introCurrentIndex * 100}%)`;
+
+        // 헤더 제목은 현재 슬라이드 h3 텍스트로 동기화
+        const activeSlide = introOverlaySlides[introCurrentIndex];
+        const slideTitle = activeSlide?.querySelector('strong');
+        if (introOverlayTitleEl && slideTitle) {
+            introOverlayTitleEl.textContent = slideTitle.textContent || '';
+        }
+
+        introDots.forEach((dot, idx) => {
+            dot.classList.toggle('is-active', idx === introCurrentIndex);
+        });
+    };
+
+    const openIntroOverlay = (index) => {
+        if (!introOverlay) return;
+        introCurrentIndex = index;
+        introOverlay.classList.add('is-active');
+        document.body.classList.add('no-scroll');
+        syncIntroOverlay();
+    };
+
+    const closeIntroOverlay = () => {
+        if (!introOverlay) return;
+        introOverlay.classList.remove('is-active');
+        document.body.classList.remove('no-scroll');
+    };
+
+    introCards.forEach(card => {
+        const idx = Number(card.getAttribute('data-intro-index')) || 0;
+        card.tabIndex = 0;
+
+        const activate = () => openIntroOverlay(idx);
+
+        card.addEventListener('click', activate);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                activate();
+            }
+        });
+    });
+
+    if (introPrevBtn && introNextBtn) {
+        introPrevBtn.addEventListener('click', () => {
+            introCurrentIndex = (introCurrentIndex + introOverlaySlides.length - 1) % introOverlaySlides.length;
+            syncIntroOverlay();
+        });
+
+        introNextBtn.addEventListener('click', () => {
+            introCurrentIndex = (introCurrentIndex + 1) % introOverlaySlides.length;
+            syncIntroOverlay();
+        });
+    }
+
+    introDots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+            introCurrentIndex = idx;
+            syncIntroOverlay();
+        });
+    });
+
+    if (introCloseBtn) {
+        introCloseBtn.addEventListener('click', closeIntroOverlay);
+    }
+
+    if (introOverlay) {
+        introOverlay.addEventListener('click', (e) => {
+            if (e.target === introOverlay || e.target.classList.contains('intro-overlay-backdrop')) {
+                closeIntroOverlay();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!introOverlay.classList.contains('is-active')) return;
+
+            if (e.key === 'Escape') {
+                closeIntroOverlay();
+            } else if (e.key === 'ArrowRight') {
+                introCurrentIndex = (introCurrentIndex + 1) % introOverlaySlides.length;
+                syncIntroOverlay();
+            } else if (e.key === 'ArrowLeft') {
+                introCurrentIndex = (introCurrentIndex + introOverlaySlides.length - 1) % introOverlaySlides.length;
+                syncIntroOverlay();
+            }
+        });
+    }
+});
+
 // localStorage의 로그인 사용자로 제출하는 헬퍼
 window.submitGameResultFromLocal = async function submitGameResultFromLocal(score, wrongItems) {
     const userIdStr = localStorage.getItem('userId');
@@ -156,6 +288,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isIndexPage) {
         // index.html 이면? -> 해시(#) 기반 모드 전환 실행
         applyModeFromHash();
+
+        // 지역별 통계 데모 차트 렌더링
+        renderRegionCharts('all');
+
+        const regionSelect = document.getElementById('regionSelect');
+        if (regionSelect) {
+            regionSelect.addEventListener('change', async () => {
+                const selectedRegion = regionSelect.value || 'all';
+                const response = await fetch(`/api/scores/regions?region=${selectedRegion}`);
+                const data = await response.json();
+                renderRegionCharts(selectedRegion, data);
+            });
+        }
     } else if (leaderboardList) {
         // index.html이 아닌데 랭킹 리스트가 있다면? 
         // -> ranking.html 이므로 랭킹을 즉시 로드! (지금은 거의 사용 안 함)

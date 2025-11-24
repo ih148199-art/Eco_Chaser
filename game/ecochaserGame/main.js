@@ -67,6 +67,9 @@ const state = {
     trackEndZ: null,
 };
 
+// 키보드 컨트롤이 중복으로 설치되는 것을 방지하는 플래그
+let keyboardInitialized = false;
+
 function updateTierHud() {
     const badge = document.getElementById('tierBadgeHud');
     if (!badge) return;
@@ -109,7 +112,7 @@ const i18n = {
         timerLabel: '남은 시간:',
         timerUnit: '초',
         introDescription:
-            '위에서 내려다보는 도시 위로 달리면서, 쓰레기를 올바르게 분리수거하세요!',
+            '달리면서 쓰레기를 올바른 통에 넣어 보는 러너 게임입니다. 기숙사·지역별 분리배출 규칙을 자연스럽게 익혀 보세요.',
         introLanguageLabel: '언어',
         introRegionLabel: '지역 선택',
         playerNamePlaceholder: '이름을 입력하세요',
@@ -300,6 +303,22 @@ function applyLanguageToUI() {
                 default:
                     break;
             }
+        });
+
+        // 카드형 지역 선택 UI와 동기화
+        const regionCards = document.querySelectorAll('.region-card');
+        regionCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                const value = card.getAttribute('data-region');
+                if (!value) return;
+
+                // select 값 변경 (기존 로직과 호환)
+                regionSelect.value = value;
+
+                // active 스타일 갱신
+                regionCards.forEach((c) => c.classList.remove('active'));
+                card.classList.add('active');
+            });
         });
     }
 
@@ -1875,7 +1894,14 @@ function updateEndingTierAndMessage() {
         ? `다음 티어(${nextName})까지 ${remain}점 남았습니다.`
         : `최고 티어에 도달했습니다!`;
 
-    msgEl.textContent = `당신의 점수: ${msg.clamped}점 — ${msg.title} : ${msg.body}`;
+    // 엔딩 메시지를 아이콘 + 제목 + 설명이 있는 작은 카드 형태로 표시
+    msgEl.innerHTML = `
+        <span class="ending-msg-icon">🎮</span>
+        <div class="ending-msg-text">
+            <span class="ending-msg-title">${msg.title}</span>
+            <span class="ending-msg-body">${msg.body}</span>
+        </div>
+    `;
 }
 
 // 게임 종료
@@ -1883,25 +1909,37 @@ function endGame() {
     state.isPlaying = false;
     if (state.animationId) cancelAnimationFrame(state.animationId);
 
+    // HUD 점수/타이머를 마지막으로 한 번 더 업데이트하여 화면 표시와 팝업 점수를 동기화
+    updateHud();
+
     document.getElementById('finalScore').textContent = state.score;
 
     // 게임 종료 시 상단 문제 패널 숨기기
     const panel = document.getElementById('questionPanel');
     if (panel) panel.style.display = 'none';
 
-    // 티어 및 종료 메시지 반영
-    updateEndingTierAndMessage();
+    // 엔딩 진입 시에는 티어 요약/메시지를 숨기고,
+    // 이름 저장 이후에만 보여준다
+    const tierSummary = document.getElementById('tierSummary');
+    const endingMsg = document.getElementById('endingMessageText');
+    if (tierSummary) tierSummary.style.display = 'none';
+    if (endingMsg) {
+        endingMsg.style.display = 'none';
+        endingMsg.innerHTML = '';
+    }
 
     // 이름 입력 섹션 표시, 버튼들 비활성화
     const nameInput = document.getElementById('endingPlayerName');
     const nameSection = document.getElementById('nameInputSection');
     const reviewBtn = document.getElementById('reviewBtn');
     const rankingBtn = document.getElementById('rankingBtn');
+    const submitScoreBtnEl = document.getElementById('submitScoreBtn');
     
     if (nameInput) nameInput.value = '';
     if (nameSection) nameSection.style.display = 'block';
     if (reviewBtn) reviewBtn.disabled = true;
     if (rankingBtn) rankingBtn.disabled = true;
+    if (submitScoreBtnEl) submitScoreBtnEl.disabled = true;
 
     document.getElementById('ending').style.display = 'flex';
 }
@@ -2256,6 +2294,10 @@ function showReviewScreen() {
 
 // 키보드 입력
 function setupKeyboardControls() {
+    // 여러 번 호출되어도 이벤트 리스너가 중복 등록되지 않도록 보호
+    if (keyboardInitialized) return;
+    keyboardInitialized = true;
+
     const exitModal = document.getElementById('exitModal');
     const exitConfirmBtn = document.getElementById('exitConfirmBtn');
     const exitCancelBtn = document.getElementById('exitCancelBtn');
@@ -2893,12 +2935,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 점수 저장 버튼
+    // 점수 저장 버튼 및 이름 입력 필수화 처리
     const submitScoreBtn = document.getElementById('submitScoreBtn');
-    if (submitScoreBtn) {
+    const endingNameInput = document.getElementById('endingPlayerName');
+
+    if (submitScoreBtn && endingNameInput) {
+        // 초기에는 이름이 없으므로 비활성화
+        submitScoreBtn.disabled = true;
+
+        // 이름 입력 시, 공백이 아닌 값이 있으면 점수 저장 버튼만 활성화
+        endingNameInput.addEventListener('input', () => {
+            const value = endingNameInput.value.trim();
+            submitScoreBtn.disabled = value.length === 0;
+        });
+
         submitScoreBtn.addEventListener('click', async () => {
-            const nameInput = document.getElementById('endingPlayerName');
-            const playerName = nameInput ? nameInput.value.trim() : '';
+            const playerName = endingNameInput.value.trim();
             
             if (!playerName) {
                 alert('이름을 입력해주세요!');
@@ -2908,8 +2960,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // 점수 저장
             state.playerName = playerName;
             await saveScore(playerName, state.score, state.regionId, state.regionName);
+
+            // 점수 저장 후 티어/엔딩 메시지 계산 및 표시
+            updateEndingTierAndMessage();
+            const tierSummary = document.getElementById('tierSummary');
+            const endingMsg = document.getElementById('endingMessageText');
+            if (tierSummary) tierSummary.style.display = 'flex';
+            if (endingMsg) endingMsg.style.display = 'flex';
             
-            // 버튼들 활성화
+            // 버튼들 활성화 (저장 이후에만 리뷰/랭킹 접근 가능)
             const reviewBtn = document.getElementById('reviewBtn');
             const rankingBtn = document.getElementById('rankingBtn');
             if (reviewBtn) reviewBtn.disabled = false;

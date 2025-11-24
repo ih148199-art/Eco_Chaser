@@ -68,7 +68,25 @@
 			</div>
 			<div class="intro-section">
 				<label for="regionSelect">지역 선택</label>
-				<select id="regionSelect">
+				<div class="region-card-grid">
+					<button type="button" class="region-card active" data-region="regions/kr_seoul.json">
+						<span class="region-card-name">서울특별시</span>
+						<span class="region-card-tag">도심 러너</span>
+					</button>
+					<button type="button" class="region-card" data-region="regions/kr_busan.json">
+						<span class="region-card-name">부산광역시</span>
+						<span class="region-card-tag">해변 러너</span>
+					</button>
+					<button type="button" class="region-card" data-region="regions/kr_incheon.json">
+						<span class="region-card-name">인천광역시</span>
+						<span class="region-card-tag">항만 러너</span>
+					</button>
+					<button type="button" class="region-card" data-region="regions/kr_cheonan.json">
+						<span class="region-card-name">천안시</span>
+						<span class="region-card-tag">캠퍼스 러너</span>
+					</button>
+				</div>
+				<select id="regionSelect" class="hidden-select">
 					<option value="regions/kr_seoul.json">서울특별시</option>
 					<option value="regions/kr_busan.json">부산광역시</option>
 					<option value="regions/kr_incheon.json">인천광역시</option>
