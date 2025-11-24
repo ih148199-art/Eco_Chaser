@@ -43,7 +43,6 @@ async function loadRanking() {
             <span>카테고리</span>
             <span>순위</span>
             <span>닉네임</span>
-            <span>오답</span>
             <span style="text-align: right;">점수</span>
         `;
         leaderboardList.appendChild(header);
@@ -69,7 +68,6 @@ async function loadRanking() {
                 <span class="category">${category}</span>
                 <span class="rank">${index + 1}${trophy}</span>
                 <span class="nickname">${entry.nickname}</span>
-                <span class="mistakes">${Number(entry.mistakes ?? 0)}</span>
                 <span class="score">${entry.score}</span>
             `;
             leaderboardList.appendChild(rankItem);
