@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>EcoChaser - 친환경 분리수거 러닝 게임</title>
+	
+	<!-- Open Graph 메타 태그 (카카오톡, SNS 공유 시 미리보기) -->
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="EcoChaser - 친환경 분리수거 게임">
+	<meta property="og:description" content="달리면서 쓰레기를 올바르게 분리수거하는 재미있는 환경 게임! 🌍♻️">
+	<meta property="og:image" content="https://your-domain.com/preview.jpg">
+	<meta property="og:url" content="https://your-domain.com">
+	<meta name="description" content="달리면서 쓰레기를 올바르게 분리수거하는 재미있는 환경 게임!">
+	
+	<!-- 카카오톡 SDK -->
+	<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" 
+		integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4" 
+		crossorigin="anonymous"></script>
+	
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="gameContainer"></div>
+
+	<div id="scoreBox"><span id="scoreLabel"></span> <span id="score">0</span> <span id="regionLabel"></span></div>
+	<div id="scoreEffect"></div>
+	<div id="timerBox"><span id="timerLabel">남은 시간:</span> <span id="timeLeft">30</span><span id="timeUnit">초</span></div>
+
+	<!-- 인게임 설정 버튼 -->
+	<button id="settingsBtn" class="hud-button" style="display: none;">⚙️</button>
+
+	<!-- 오답 말풍선 (캐릭터 위) -->
+	<div id="wrongAnswerBubble" class="speech-bubble hidden">
+		<div class="bubble-content">
+			<span id="bubbleIcon">❌</span>
+			<span id="bubbleText"></span>
+		</div>
+	</div>
+
+	<div id="questionPanel">
+		<div id="questionText">문제가 표시됩니다</div>
+	</div>
+	<div id="feedbackMessage"></div>
+
+	<!-- 인트로 전체 화면 영상 -->
+	<div id="introVideoScreen" class="screen">
+		<video id="introVideo" src="intro.mp4" autoplay muted playsinline onerror="this.style.display='none'">
+			브라우저가 비디오 태그를 지원하지 않습니다.
+		</video>
+	</div>
+
+	<!-- 인트로: 게임 시작 전 설정 화면 -->
+	<div id="intro" class="screen" style="display: none;">
+		<div class="container intro-card">
+			<div class="intro-logo">
+				<img id="ecoLogo" src="logo.png" alt="EcoChaser 로고">
+			</div>
+			<div class="intro-headline">
+				<p id="introDescription" class="intro-description">
+					달리면서 쓰레기를 올바른 통에 넣어 보는 러너 게임입니다.<br>
+					기숙사·지역별 분리배출 규칙을 자연스럽게 익혀 보세요.
+				</p>
+			</div>
+			<div class="intro-form">
+				<div class="intro-field">
+					<label class="field-label" for="languageSelect">언어</label>
+					<div class="select-wrapper">
+						<select id="languageSelect" class="styled-select">
+							<option value="ko">한국어</option>
+							<option value="en">English</option>
+						</select>
+					</div>
+				</div>
+				<div class="intro-field region-field">
+					<div class="field-label">지역 선택</div>
+					<div class="region-grid">
+						<button type="button" class="region-card active" data-file="regions/kr_seoul.json" data-label-ko="서울특별시" data-label-en="Seoul">
+							<span class="region-name">서울특별시</span>
+						</button>
+						<button type="button" class="region-card" data-file="regions/kr_busan.json" data-label-ko="부산광역시" data-label-en="Busan">
+							<span class="region-name">부산광역시</span>
+						</button>
+						<button type="button" class="region-card" data-file="regions/kr_incheon.json" data-label-ko="인천광역시" data-label-en="Incheon">
+							<span class="region-name">인천광역시</span>
+						</button>
+						<button type="button" class="region-card" data-file="regions/kr_cheonan.json" data-label-ko="천안시" data-label-en="Cheonan">
+							<span class="region-name">천안시</span>
+						</button>
+					</div>
+					<label for="regionSelect" class="sr-only">지역 선택</label>
+					<select id="regionSelect" class="sr-only" aria-hidden="true" tabindex="-1">
+						<option value="regions/kr_seoul.json">서울특별시</option>
+						<option value="regions/kr_busan.json">부산광역시</option>
+						<option value="regions/kr_incheon.json">인천광역시</option>
+						<option value="regions/kr_cheonan.json">천안시</option>
+					</select>
+				</div>
+			</div>
+			<div class="intro-actions">
+				<button type="button" id="startGameBtn" class="intro-start-btn">게임 시작</button>
+				<button type="button" class="intro-home-btn" onclick="window.location.href='../../index.html'">← 홈으로 돌아가기</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 설정 메뉴 모달 -->
+	<div id="settingsModal" class="modal hidden">
+		<div class="modal-content settings-menu">
+			<h3>⚙️ 설정</h3>
+			<div class="settings-buttons">
+				<button type="button" id="quitGameBtn" class="settings-menu-btn">🏠 게임 종료</button>
+				<button type="button" id="resumeGameBtn" class="settings-menu-btn secondary">▶️ 계속하기</button>
+				<button type="button" id="goHomeBtn" class="settings-menu-btn secondary">⬅️ 바탕화면으로</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 게임 종료 확인 모달 (설정 메뉴에서 게임 종료) -->
+	<div id="quitConfirmModal" class="modal hidden">
+		<div class="modal-content">
+			<h3 style="margin-top: 0; color: #e74c3c;">⚠️ 게임 종료</h3>
+			<p style="margin: 20px 0; line-height: 1.6;">
+				정말 게임을 종료하시겠습니까?<br>
+				<strong>현재 진행 중인 게임은 저장되지 않으며,<br>
+				점수에 반영되지 않습니다.</strong>
+			</p>
+			<div class="modal-buttons">
+				<button type="button" id="quitConfirmBtn" style="background: #e74c3c;">게임 종료</button>
+				<button type="button" id="quitCancelBtn" class="secondary">취소</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- ESC 키 종료 확인 모달 -->
+	<div id="exitModal" class="modal hidden">
+		<div class="modal-content">
+			<p>게임을 나가시겠습니까?<br>저장되지 않은 게임은 점수에 반영되지 않습니다.</p>
+			<div class="modal-buttons">
+				<button type="button" id="exitConfirmBtn">확인</button>
+				<button type="button" id="exitCancelBtn" class="secondary">취소</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 점수 저장 완료 모달 -->
+	<div id="scoreSavedModal" class="modal hidden">
+		<div class="modal-content">
+			<p id="scoreSavedMessage">점수가 저장되었습니다!</p>
+			<div class="modal-buttons">
+				<button type="button" id="scoreSavedOkBtn">확인</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 공유 요약 모달: 배지 + 이름 + 점수 + 지역 표시 -->
+	<div id="shareSummaryModal" class="modal hidden">
+		<div class="modal-content share-summary">
+			<div class="share-summary-body">
+				<div class="share-badge">
+					<img id="shareBadgeIcon" src="" alt="배지" />
+				</div>
+				<div class="share-texts">
+					<h4 id="shareBadgeTitle" class="share-badge-title"></h4>
+					<p id="shareBadgeBody" class="share-badge-body"></p>
+					<div class="share-meta">
+						<p id="sharePlayerLine"></p>
+						<p id="shareRegionLine"></p>
+						<p id="shareScoreLine"></p>
+					</div>
+				</div>
+			</div>
+			<div class="modal-buttons">
+				<button type="button" id="shareSummaryCloseBtn">닫기</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="ending" class="screen">
+		<div class="container ending-card">
+			<h2 id="endingTitle">게임 종료!</h2>
+			<div class="ending-score-card">
+				<div class="ending-score-label" id="finalScoreLabel">최종 점수</div>
+				<div class="ending-score-value">
+					<span id="finalScore">0</span><span class="score-unit" id="finalScoreUnit">점</span>
+				</div>
+				<div class="ending-player-summary" id="endingPlayerSummary"></div>
+			</div>
+			<div class="name-input-section" id="nameInputSection">
+				<input type="text" id="endingPlayerName" placeholder="이름을 입력하세요" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false">
+				<button id="submitScoreBtn">점수 저장</button>
+				<p id="nameError" class="input-error"></p>
+			</div>
+			<div id="endingMessageText" class="ending-message" style="display: none;">
+				<div class="ending-message-icon">
+					<img id="endingBadgeIcon" src="" alt="배지 아이콘" style="width: 60px; height: 60px; object-fit: contain;">
+				</div>
+				<div class="ending-message-text">
+					<strong id="endingMessageTitle"></strong>
+					<p id="endingMessageBody"></p>
+				</div>
+			</div>
+			<div class="button-row" id="endingActions">
+				<button id="reviewBtn" disabled>오답노트</button>
+				<button id="restartBtn">다시 시작</button>
+				<button id="rankingBtn" disabled>랭킹 보기</button>
+				<button id="shareBtn">공유하기</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="review" class="screen" style="display: none;">
+		<div class="container">
+			<h2>📖 오답노트</h2>
+			<div id="reviewList"></div>
+			<div class="button-row">
+				<button id="reviewRestartBtn">다시 시작</button>
+				<button id="reviewBackBtn">닫기</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="ranking" class="screen" style="display: none;">
+		<div class="container">
+			<h2 id="rankingTitle">🏆 랭킹</h2>
+			
+			<!-- 탭 버튼 -->
+			<div class="ranking-tabs">
+				<button class="tab-btn active" data-tab="region" id="regionTabBtn">지역별 랭킹</button>
+				<button class="tab-btn" data-tab="personal" id="personalTabBtn">지역 순위</button>
+				<button class="tab-btn" data-tab="stats" id="statsTabBtn">통계</button>
+			</div>
+			
+			<!-- 지역별 랭킹 -->
+			<div id="regionRanking" class="tab-content active">
+				<p class="tab-description">지역별 평균 점수 순위</p>
+				<div id="regionRankingList"></div>
+			</div>
+			
+			<!-- 선택한 지역 내 개인 순위 -->
+			<div id="personalRanking" class="tab-content">
+				<p class="tab-description" id="personalRankingDesc">서울특별시 플레이어 순위</p>
+				<div id="personalRankingList"></div>
+				<p id="myRankText"></p>
+			</div>
+			
+			<!-- 통계 그래프 -->
+			<div id="statsView" class="tab-content">
+				<p class="tab-description">지역별 플레이 통계</p>
+				<div class="stats-controls">
+					<label for="statsRegionSelect">지역 선택</label>
+					<select id="statsRegionSelect" class="styled-select stats-select"></select>
+				</div>
+				<div class="stats-summary" id="statsSummary"></div>
+				<div class="stats-grid">
+					<div class="stats-card">
+						<h3>지역별 평균 오답률</h3>
+						<canvas id="statsRegionAccuracyChart" width="400" height="220"></canvas>
+						<p class="chart-caption" id="statsRegionAccuracyCaption"></p>
+					</div>
+					<div class="stats-card">
+						<h3>오답 통계</h3>
+						<canvas id="statsWrongChart" width="400" height="220"></canvas>
+						<p class="chart-caption" id="statsWrongCaption"></p>
+					</div>
+				</div>
+				<div class="stats-table-wrapper">
+					<table id="statsDistributionTable"></table>
+				</div>
+			</div>
+		
+			<div class="button-row">
+				<button id="rankingBackBtn">확인</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 게임 사운드 -->
+	<audio id="bgm" loop preload="auto">
+		<source src="audio/background.mp3" type="audio/mpeg">
+	</audio>
+	<audio id="correctSound" preload="auto">
+		<source src="audio/correct.mp3" type="audio/mpeg">
+	</audio>
+	<audio id="failSound" preload="auto">
+		<source src="audio/fail.mp3" type="audio/mpeg">
+	</audio>
+	<audio id="swooshSound" preload="auto">
+		<source src="audio/swoosh.mp3" type="audio/mpeg">
+	</audio>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+	<script src="environment.js"></script>
+	<script src="main.js"></script>
+</body>
+</html>

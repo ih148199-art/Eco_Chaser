@@ -1,0 +1,151 @@
+{
+  "regionId": "kr_busan",
+  "regionName": "부산광역시",
+  "bins": [
+    { "id": "general", "name": "일반", "name_en": "General Waste", "color": 5025616 },
+    { "id": "recycle", "name": "재활용", "name_en": "Recycle Bin", "color": 2201331 },
+    { "id": "food", "name": "음식물", "name_en": "Food Waste", "color": 16761095 }
+  ],
+  "problems": [
+    {
+      "question": "부산에서 커피 찌꺼기는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of coffee grounds?",
+      "answer": "general",
+      "explanation": "부산에서는 커피 찌꺼기는 음식물로 분류되지 않아 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, coffee grounds are not considered food waste and must be thrown away as general waste."
+    },
+    {
+      "question": "부산에서 고무장갑은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of rubber gloves?",
+      "answer": "general",
+      "explanation": "고무장갑은 재활용이 불가능하여 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, rubber gloves are non-recyclable and should be discarded as general waste."
+    },
+    {
+      "question": "부산에서 고구마 껍질은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of sweet potato peels?",
+      "answer": "food",
+      "explanation": "고구마 껍질은 음식물 쓰레기로 분류됩니다.",
+      "explanation_en": "In Busan, sweet potato peels are classified as food waste."
+    },
+    {
+      "question": "부산에서 닭뼈는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of chicken bones?",
+      "answer": "general",
+      "explanation": "뼈류는 음식물 쓰레기로 처리되지 않아 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, chicken bones cannot be processed as food waste and must be discarded as general waste."
+    },
+    {
+      "question": "부산에서 파뿌리는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of green onion roots?",
+      "answer": "food",
+      "explanation": "파뿌리는 음식물 쓰레기로 분류됩니다.",
+      "explanation_en": "In Busan, green onion roots are classified as food waste."
+    },
+    {
+      "question": "부산에서 바나나 껍질은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of banana peels?",
+      "answer": "food",
+      "explanation": "바나나 껍질은 음식물 쓰레기입니다.",
+      "explanation_en": "In Busan, banana peels are classified as food waste."
+    },
+    {
+      "question": "부산에서 양파 껍질은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of onion peels?",
+      "answer": "food",
+      "explanation": "양파 껍질은 음식물 쓰레기로 분류됩니다.",
+      "explanation_en": "In Busan, onion peels are classified as food waste."
+    },
+    {
+      "question": "부산에서 사과껍질은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of apple peels?",
+      "answer": "food",
+      "explanation": "사과껍질은 음식물 쓰레기입니다.",
+      "explanation_en": "In Busan, apple peels are classified as food waste."
+    },
+    {
+      "question": "부산에서 생선 가시는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of fish bones?",
+      "answer": "general",
+      "explanation": "생선 가시는 음식물로 처리되지 않아 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, fish bones cannot be processed as food waste and must be discarded as general waste."
+    },
+    {
+      "question": "부산에서 치킨뼈는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of chicken bones?",
+      "answer": "general",
+      "explanation": "치킨뼈는 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, chicken bones are classified as general waste."
+    },
+    {
+      "question": "부산에서 계란껍질은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of eggshells?",
+      "answer": "general",
+      "explanation": "계란껍질은 음식물로 분류되지 않습니다.",
+      "explanation_en": "In Busan, eggshells are not considered food waste and must be discarded as general waste."
+    },
+    {
+      "question": "부산에서 흙 묻은 채소는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of soil-covered vegetables?",
+      "answer": "general",
+      "explanation": "흙이 묻은 채소는 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, vegetables with soil on them are classified as general waste."
+    },
+    {
+      "question": "부산에서 양배추 겉잎은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of outer cabbage leaves?",
+      "answer": "food",
+      "explanation": "양배추 겉잎은 음식물 쓰레기로 분류됩니다.",
+      "explanation_en": "In Busan, outer cabbage leaves are classified as food waste."
+    },
+    {
+      "question": "부산에서 곰팡이 핀 빵은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of moldy bread?",
+      "answer": "general",
+      "explanation": "곰팡이 핀 빵은 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, moldy bread is classified as general waste."
+    },
+    {
+      "question": "부산에서 종이컵은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of paper cups?",
+      "answer": "general",
+      "explanation": "코팅된 종이컵은 재활용이 어려워 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, coated paper cups are classified as general waste."
+    },
+    {
+      "question": "부산에서 플라스틱 용기는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of plastic containers?",
+      "answer": "recycle",
+      "explanation": "깨끗한 플라스틱 용기는 재활용 가능합니다.",
+      "explanation_en": "In Busan, clean plastic containers are recyclable."
+    },
+    {
+      "question": "부산에서 비닐봉투는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of plastic bags?",
+      "answer": "recycle",
+      "explanation": "비닐류는 재활용 품목입니다.",
+      "explanation_en": "In Busan, plastic bags are classified as recyclable waste."
+    },
+    {
+      "question": "부산에서 투명 페트병은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of clear PET bottles?",
+      "answer": "recycle",
+      "explanation": "투명 페트병은 재활용 품목입니다.",
+      "explanation_en": "In Busan, clear PET bottles are recyclable waste."
+    },
+    {
+      "question": "부산에서 캔류는 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of cans?",
+      "answer": "recycle",
+      "explanation": "캔류는 재활용 품목입니다.",
+      "explanation_en": "In Busan, cans are recyclable items."
+    },
+    {
+      "question": "부산에서 지퍼백은 어떻게 버려야 할까요?",
+      "question_en": "In Busan, how should you dispose of zipper bags?",
+      "answer": "general",
+      "explanation": "지퍼백은 재활용이 불가하여 일반 쓰레기입니다.",
+      "explanation_en": "In Busan, zipper bags are non-recyclable and must be thrown away as general waste."
+    }
+  ]
+}
