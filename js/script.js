@@ -28,12 +28,15 @@ async function loadRanking() {
             return;
         }
 
-        const scores = data.ranking;
-        // 서버에서 이미 정렬해서 보내주므로 클라이언트에서 정렬할 필요가 없습니다.
+        // 전체 랭킹은 admin.html 등에서 사용하고,
+        // 메인 페이지(index.html)에서는 상위 10위만 한 눈에 보이도록 제한합니다.
+        const allScores = Array.isArray(data.ranking) ? data.ranking : [];
+        const scores = allScores.slice(0, 10);
+        // 서버에서 이미 정렬해서 보내주므로 클라이언트에서 정렬할 필요는 없습니다.
 
         // 이전 랭킹 데이터를 보관해서, 변경된 항목에만 하이라이트를 줄 수 있도록 함
         const prevRanking = Array.isArray(window.__prevRanking)
-            ? window.__prevRanking
+            ? window.__prevRanking.slice(0, 10)
             : [];
 
         leaderboardList.innerHTML = '';
